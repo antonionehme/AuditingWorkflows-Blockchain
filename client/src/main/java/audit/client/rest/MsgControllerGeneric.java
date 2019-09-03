@@ -21,7 +21,7 @@ public class MsgControllerGeneric {
 
 	private static final Logger LOG = LoggerFactory.getLogger(MsgControllerGeneric.class);
 
-	private final BWorkflowGenericParticipant2 msgService;//MsgService msgService;
+	private final BWorkflowGenericParticipant2 msgService;//MsgService msgService;// change to WorkflowGenericParticipant to run simulations with Audit server
 	// private final NodeService nodeService;
 
 	@Autowired

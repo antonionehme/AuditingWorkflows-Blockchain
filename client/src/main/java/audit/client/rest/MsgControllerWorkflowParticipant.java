@@ -20,7 +20,7 @@ public class MsgControllerWorkflowParticipant {
 
 	private static final Logger LOG = LoggerFactory.getLogger(MsgControllerWorkflowParticipant.class);
 
-	private final BWorkflowParticipant msgService;//MsgService msgService;
+	private final BWorkflowParticipant msgService;//MsgService msgService; // change to WorkflowParticipant to run simulations with Audit server
 	// private final NodeService nodeService;
 
 	@Autowired
