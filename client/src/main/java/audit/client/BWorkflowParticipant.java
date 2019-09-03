@@ -80,6 +80,16 @@ public class BWorkflowParticipant {//Added the extension hoping to get the servi
       static double mu=0; static double sigma=0;
       static int SentMessageSize=0; static int ReceivedMessageSize=0;
       static int UnencryptedSentMsglength=0; static int encryptedSentMsglength=0;
+      static JWTMsg globalmsg=new JWTMsg();
+    static KeyPair senderPair;
+
+    static {
+        try {
+            senderPair = globalmsg.getKeyPairFromFile("client3", "clientpw", clientpassphrase, "clientprivate");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void main(String args[]) throws Exception, IOException {
 
@@ -204,7 +214,7 @@ public class BWorkflowParticipant {//Added the extension hoping to get the servi
         long endTime_recieve = System.currentTimeMillis(); long duration_recieve = (endTime_recieve - startTime_recieve);//+(long)delay;
         //long duration_recieve_with_delay=(endTime_recieve - startTime_recieve)+(long)delay;
         //fileWriter_recieve.append(name+","+duration_recieve+","+duration_recieve_with_delay+"\n");
-        fileWriter_recieve.append(name+","+duration_recieve+","+ReceivedMessageSize+","+AuditRecordsSize()+"\n");
+        fileWriter_recieve.append(name+","+duration_recieve+","+ReceivedMessageSize+","+"\n");
         //fileWriter_recieve.append(name+","+duration_recieve+"\n");
         fileWriter_recieve.flush();
         fileWriter_recieve.close();
@@ -392,8 +402,12 @@ public static void saveKey(String signature, String keychain, String keyname){
         	addPostedAuditRec("Added Local Record");
            option=scan.nextLine();}
            break;*/
-        case "0" :{
-        publishAddress("key.pub", "Antonio Nehme");//publishAddress("key.pub", "Antonio Nehme");
+        case "0" :{//System.out.println(Files.readAllBytes(Paths.get("key.pub")));
+            System.out.println(senderPair.getPublic().toString());
+            saveKey("xiaohu", senderPair.getPublic().toString(), "participant1");
+            getKey("xiaohu", "0x48e46c23904a4785191719a43c889a3c8540011d", "participant1");
+           // System.out.println(senderPair.getPublic().toString());
+        //publishAddress("key.pub", "Antonio Nehme");//publishAddress("key.pub", "Antonio Nehme");
         System.out.println("0 to Add Address, 1 to VerifyServer, 2 to see last reported record on the audit server, 3 to Publish a message, 4 Send a message to another recipient, 5 to Override Recipient Port,6 Send with clear , X to exit.");
         option=scan.nextLine();}
         break; 
@@ -431,7 +445,13 @@ public static void saveKey(String signature, String keychain, String keyname){
        // publishAuditRecord("key.priv","ParaPrev2","HEWtNSfUAMKEitKc5MBThupdOTj98oV/VaLG9LbR5Ms=");
 
             JWTMsg msg=new JWTMsg("Data", "Issuer", "Recipient", "Label", new String[] {"Prev1", "Prev2"}, new String[] {"ParaPrev1", "ParqaPrev2"});
-        //Time this 
+
+            msg.setSig(msg.sign("Data", senderPair.getPrivate()));
+          //  String signature = msg.sign("foobar", receiverPair.getPrivate());
+
+            //Let's check the signature
+           // boolean isCorrect = msg.verify("foobar", signature, receiverPair.getPublic());
+        //Time this
         
     	FileWriter fileWriter = new FileWriter(file_send,true);
     	long startTime = System.currentTimeMillis();
@@ -440,7 +460,7 @@ public static void saveKey(String signature, String keychain, String keyname){
         
         long endTime = System.currentTimeMillis();long duration = (endTime - startTime);
         //fileWriter.append(name+ " to "+recipientPort+","+duration+","+SentMessageSize+","+AuditRecordsSize()+"\n");
-        fileWriter.append(name+ " to "+recipientPort+","+duration+","+UnencryptedSentMsglength+","+encryptedSentMsglength+","+SentMessageSize+","+AuditRecordsSize()+"\n");
+        fileWriter.append(name+ " to "+recipientPort+","+duration+","+UnencryptedSentMsglength+","+encryptedSentMsglength+","+SentMessageSize+","+"\n");
         /*///////////
         long startTime2 = System.currentTimeMillis();
         //sendMessageToParticipant("http://localhost:8102/participant?publish=true", msg, "key.priv", "HEWtNSfUAMKEitKc5MBThupdOTj98oV/VaLG9LbR5Ms=", "client2", "server");
@@ -707,7 +727,15 @@ public static void saveKey(String signature, String keychain, String keyname){
 		String forAudit=msg.ArraytoString(msg.encrypt_long(msg.Split_to_List(msg.Plain_JWT(msg)), auditPair.getPublic()));
 		String VerifyAudit=msg.ArraytoString(msg.encrypt_long(msg.Split_to_List(DecJWT), auditPair.getPublic()));
 		if (forAudit.equals(VerifyAudit))System.out.println("Bingo v");
-    }
+
+        String signature = msg.sign("foobar", receiverPair.getPrivate());
+
+        //Let's check the signature
+        boolean isCorrect = msg.verify("foobar", signature, receiverPair.getPublic());
+        System.out.println("Signature correct: " + isCorrect);
+      }
+
+    //String signature=msg.sign
     
    //This has to be implemented in order to use keys from files, rather than from key store. THis is because we can't have the audit server's or the intended recipient's private key.
     //We would need to modify Enc_JWT and methods
@@ -879,6 +907,7 @@ pullAudits();// Verify that tthe audit record shows on the audit server/
     private static void publishAddress(URL node, Path publicKey, String name) throws IOException { //This is for the client to register with the audit node (audit server).
     RestTemplate restTemplate = new RestTemplate();
     Address address = new Address(name, Files.readAllBytes(publicKey));
+    //Files.readAllBytes(Paths.get(PubKey));
     restTemplate.put(node.toString() + "/address?publish=true", address);
     System.out.println("Hash of new address: " + Base64.encodeBase64String(address.getHash()));
 }

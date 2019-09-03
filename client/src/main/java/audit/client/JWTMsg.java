@@ -66,6 +66,7 @@ public class JWTMsg {
 	  static private final String serverpassphrase = "serverpw";
 	  
 	  private String Data, Iss, Rec, Label;
+	  private String Sig="";
 	  private String[] Prev, ParaPrev;
 	  
 	  public JWTMsg() {
@@ -79,7 +80,17 @@ public class JWTMsg {
 			this.Prev=Prev;
 			this.ParaPrev=ParaPrev;
 		}
-		
+
+	public JWTMsg(String Data, String Iss, String Rec, String Label, String[] Prev, String[] ParaPrev, String Sig) {
+		this.Data=Data;
+		this.Iss=Iss;
+		this.Rec=Rec;
+		this.Label=Label;
+		this.Prev=Prev;
+		this.ParaPrev=ParaPrev;
+		this.Sig=Sig;
+	}
+
 		//Added this in order to be able not to add ParaPrev.
 		public JWTMsg(String Data, String Iss, String Rec, String Label, String[] Prev) {
 			this.Data=Data;
@@ -127,9 +138,17 @@ public class JWTMsg {
 			return Iss;
 		}
 
-		public void setIss(String iss) {
-			Iss = iss;
+		public void setSig(String iss) {
+			Sig = Sig;
 		}
+
+		public String getSig() {
+		return Sig;
+	}
+
+	public void setIss(String iss) {
+		Iss = iss;
+	}
 
 		public String getRec() {
 			return Rec;
