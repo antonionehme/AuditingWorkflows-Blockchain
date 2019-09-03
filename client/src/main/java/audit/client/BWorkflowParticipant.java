@@ -93,7 +93,7 @@ public class BWorkflowParticipant {//Added the extension hoping to get the servi
 
     public static void main(String args[]) throws Exception, IOException {
 
-    //ini();
+    ini();
     /*
         JWTMsg msg=new JWTMsg("Data", "Issuer", "Recipient", "Label", new String[] {"Prev1"}, new String[] {"ParaPrev1"});
       //  KeyPair receiverPair =msg.getKeyPairFromFile("client2", "clientpw", clientpassphrase, "clientprivate");

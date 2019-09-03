@@ -240,7 +240,7 @@ public class Web3JClientAPI2 {
 
     }
     /*save public keys of workflow and participants into the blockchain*/
-    public  void saveKey(String signature, String keyChain, String keyName, BigInteger keyType) {
+    public  String saveKey(String signature, String keyChain, String keyName, BigInteger keyType) {
         contractAddress = keyFactory.getContractAddress(); //single contract
         if (contractAddress != null && credentials !=null) {
             try {
@@ -253,6 +253,7 @@ public class Web3JClientAPI2 {
 
                 List<String> l = keyFactory.getKeyIdByOwner("0x48e46c23904a4785191719a43c889a3c8540011d").sendAsync().get();
                 System.out.println("keys id are:"+l);
+                return "System log is:"+transactionReceipt.getLogs();
             } catch (IOException | CipherException e) {
                 e.printStackTrace();
             } catch (Exception e) {
@@ -260,24 +261,26 @@ public class Web3JClientAPI2 {
             }
         } else {
             System.out.println("please check the smart contract deployment and credentials load.");
-        }
 
+        }
+        return "please check the smart contract deployment and credentials load.";
     }
     /* compare received payload with audit trail*/
-    public void compareLog(String signature, String payload, String owner) {
+    public String compareLog(String signature, String payload, String owner) {
         contractAddress = logFactory.getContractAddress();
         if (contractAddress != null && credentials !=null) {
             try {
                 //logFactory = LogFactory.load(contractAddress,web3,credentials,GAS_PRICE,GAS_LIMIT);
                 Boolean b = logFactory.compareLogs(signature, payload, owner).sendAsync().get();  // trigger with verification
                 System.out.println("is match ? "+b);
+                return "it's a match";
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {
             System.out.println("please check the smart contract logFactory deployment and credentials load.");
         }
-
+        return "it's not a match";
     }
     /*get public keys from bockchain*/
     public void getKey(String signature, String owner, String keyName,BigInteger keyType) {

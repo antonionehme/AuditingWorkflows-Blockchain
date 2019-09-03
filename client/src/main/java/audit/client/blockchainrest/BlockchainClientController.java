@@ -44,16 +44,16 @@ public class BlockchainClientController {
     }
     @RequestMapping(value= "compareLog", method = RequestMethod.POST)
         //void compareLog(@RequestBody String signature, @RequestParam(required = true) String payload, @RequestParam(required = true) String owner) throws Exception {
-    void compareLog(@RequestParam(required = true) String signature, @RequestParam(required = true) String payload, @RequestParam(required = true) String owner) throws Exception {
+    String compareLog(@RequestParam(required = true) String signature, @RequestParam(required = true) String payload, @RequestParam(required = true) String owner) throws Exception {
         payload = DigestUtils.sha256Hex(payload);  //calculate hash of received payload before comparison
-        BlockchainClient.compareLog(signature, payload, owner);
+       return BlockchainClient.compareLog(signature, payload, owner);
     }
 
     @RequestMapping(value= "saveKey", method = RequestMethod.POST)
     //void saveKey(@RequestBody String signature, @RequestParam(required = true) String keyChain, @RequestParam(required = true) String keyName, BigInteger keyType) throws Exception {
-    void saveKey(@RequestParam(required = true) String signature, @RequestParam(required = true) String keyChain, @RequestParam(required = true) String keyName) throws Exception {
+    String saveKey(@RequestParam(required = true) String signature, @RequestParam(required = true) String keyChain, @RequestParam(required = true) String keyName) throws Exception {
         System.out.println(""+signature+ " "+ keyChain+" "+keyName);
-        BlockchainClient.saveKey(signature, keyChain, keyName, BigInteger.valueOf(0));
+       return BlockchainClient.saveKey(signature, keyChain, keyName, BigInteger.valueOf(0));
     }
 
     // public void getKey(String signature, String owner, String keyName, BigInteger keyType)
