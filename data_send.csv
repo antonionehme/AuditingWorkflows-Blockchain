@@ -1,4 +1,9 @@
-Participant1 to 8102,17777,127,344,1,
-Participant1 to 8102,15386,127,344,1,
-Participant1 to 8102,20323,127,344,1,
-Participant1 to 8102,17000,127,344,1,
+Participant,Time to Send,Unencrypted Msg Length, Encrypted Msg Length,Size of Message,Data size on server
+Participant2 to 8102,15475,117,344,1,
+BParticipant3 to 8102,15254,118,344,1,
+BParticipant3 to 8101,30229,118,344,1,
+BParticipant4 to 8103,15262,118,344,1,
+BParticipant4 to 8102,15247,118,344,1,
+BParticipant5 to 8102,15289,118,344,1,
+BParticipant5 to 8101,15299,118,344,1,
+Participant2 to 8102,45262,117,344,1,

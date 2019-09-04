@@ -26,8 +26,7 @@ public class Orchestrator {
 	
 	 public static void ExecuteTopology() throws Exception {
 		 List<List<String>> records = new ArrayList<>();
-		 String Readfrom="C:\\Users\\ID126219\\Dropbox\\PhD\\Readings\\BCU\\Papers and Drafts\\Authorization and Audit Framework for E-Government Workflows\\"
-		 		+ "Evaluation\\Brite\\Output\\Single Topologies- No Aggregations\\15 Nodes\\BAn15m2_1-Topology.csv";
+		 String Readfrom="/home/auditworkflow/IdeaProjects/AuditProject/topologies/552.csv";
 		 System.out.println(Readfrom);
 		 try (BufferedReader br = new BufferedReader(new FileReader(Readfrom))) {
 		  String line;

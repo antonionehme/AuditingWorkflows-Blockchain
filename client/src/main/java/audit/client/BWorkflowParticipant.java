@@ -93,7 +93,7 @@ public class BWorkflowParticipant {//Added the extension hoping to get the servi
 
     public static void main(String args[]) throws Exception, IOException {
 
-    ini();
+    //ini();
     /*
         JWTMsg msg=new JWTMsg("Data", "Issuer", "Recipient", "Label", new String[] {"Prev1"}, new String[] {"ParaPrev1"});
       //  KeyPair receiverPair =msg.getKeyPairFromFile("client2", "clientpw", clientpassphrase, "clientprivate");
@@ -582,42 +582,25 @@ public static void saveKey(String signature, String keychain, String keyname){
         //System.out.println("Array Length: ");
         //JWTMsg msg=new JWTMsg(dummyData, name, "Recipient", "http://localhost:"+recipientPort, new String[] {mostRecentAuditRecord}, new String[] {"ParaPrev1", "ParaPrev2"});
       //Added to allow participant to send message without having to receive anything before(in case this should be considered.
-        if (first) {//first participant to publish
+        /*if (first) {//first participant to publish
       	  publishAuditRecord("key.priv","Prev1","HEWtNSfUAMKEitKc5MBThupdOTj98oV/VaLG9LbR5Ms=");
             //  publishAuditRecord("key.priv","Prev2","HEWtNSfUAMKEitKc5MBThupdOTj98oV/VaLG9LbR5Ms=");
               publishAuditRecord("key.priv","ParaPrev1","HEWtNSfUAMKEitKc5MBThupdOTj98oV/VaLG9LbR5Ms=");
               publishAuditRecord("key.priv","ParaPrev2","HEWtNSfUAMKEitKc5MBThupdOTj98oV/VaLG9LbR5Ms=");
-        }
+        }*/
         JWTMsg msg;
-        if(AuditRecsforReceivedMessages.isEmpty()) {
-        	 publishAuditRecord("key.priv","Prev1","HEWtNSfUAMKEitKc5MBThupdOTj98oV/VaLG9LbR5Ms=");
-             //  publishAuditRecord("key.priv","Prev2","HEWtNSfUAMKEitKc5MBThupdOTj98oV/VaLG9LbR5Ms=");
-               publishAuditRecord("key.priv","ParaPrev1","HEWtNSfUAMKEitKc5MBThupdOTj98oV/VaLG9LbR5Ms=");
-              // publishAuditRecord("key.priv","ParaPrev2","HEWtNSfUAMKEitKc5MBThupdOTj98oV/VaLG9LbR5Ms=");
-             //msg=new JWTMsg(dummyData, name, "Recipient", "http://localhost:"+recipientPort, new String[] {"Prev1"}, new String[] {"ParaPrev1", "ParaPrev2"});
-               /*//Use this for msg generation
-          	  msg=new JWTMsg(dummyData, name, recipientPort, "THis is a label", new String[] {"Prev1"}, new String[] {"ParaPrev1"});
-               */
-               msg=new JWTMsg(ToSend.to_send, name, recipientPort, "THis is a label", new String[] {"Prev1"}, new String[] {"ParaPrev1"});
-               
-        }
-        else { //msg=new JWTMsg(dummyData, name, "Recipient", "http://localhost:"+recipientPort, ArraylistToArray(AuditRecsforReceivedMessages), new String[] {"ParaPrev1", "ParaPrev2"});
-        	//msg=new JWTMsg(dummyData, name, recipientPort, "", ArraylistToArray(AuditRecsforReceivedMessages), new String[] {"ParaPrev1"});
-        	/*//Use this for msg generation
-       	    msg=new JWTMsg(dummyData, name, recipientPort, "", ArraylistToArray(ReferenceofAuditRecsforReceivedMessages), new String[] {"ParaPrev1"});
-        	*/
-        	msg=new JWTMsg(ToSend.to_send, name, recipientPort, "", ArraylistToArray(ReferenceofAuditRecsforReceivedMessages), new String[] {"ParaPrev1"});
-        	}
-        
+        msg=new JWTMsg(ToSend.to_send, name, recipientPort, "THis is a label", new String[] {"Prev1"}, new String[] {"ParaPrev1"});
+
+        //msg=new JWTMsg(ToSend.to_send, name, recipientPort, "", ArraylistToArray(ReferenceofAuditRecsforReceivedMessages), new String[] {"ParaPrev1"});
        
     	FileWriter fileWriter = new FileWriter(file_send,true);
     	long startTime = System.currentTimeMillis();
     	
-        sendMessageToParticipant("http://localhost:"+recipientPort+"/participant?publish=true", msg, "key.priv", "HEWtNSfUAMKEitKc5MBThupdOTj98oV/VaLG9LbR5Ms=", "client2", "server");
+        sendMessageToParticipant("http://localhost:"+recipientPort+"/participant?publish=true", msg, "key.priv", "HEWtNSfUAMKEitKc5MBThupdOTj98oV/VaLG9LbR5Ms=", "client3", "server");
        
         long endTime = System.currentTimeMillis();long duration = (endTime - startTime);
        // fileWriter.append(name+ " to "+recipientPort+","+duration+","+SentMessageSize+","+AuditRecordsSize()+"\n");
-        fileWriter.append(name+ " to "+recipientPort+","+duration+","+UnencryptedSentMsglength+","+encryptedSentMsglength+","+SentMessageSize+","+AuditRecordsSize()+"\n");
+        fileWriter.append(name+ " to "+recipientPort+","+duration+","+UnencryptedSentMsglength+","+encryptedSentMsglength+","+SentMessageSize+","+"\n");
         //fileWriter.append(name+ " to "+recipientPort+","+duration+"\n");
     	fileWriter.flush();
         fileWriter.close();

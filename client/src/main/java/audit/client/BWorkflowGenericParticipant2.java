@@ -73,7 +73,7 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
 	  //static String file_recieve = "data_receive.csv";
 	  static String file_combo = "data_combo.csv";
 	  private static String addresstoPublish="";
-	  private static String port="8102";
+	  private static String port="";
 	  private static String name="Participant2";
 	  private static String recipientPort= "";
 	  static String file_recieve = "data_receive.csv";
@@ -96,16 +96,16 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
     	  //Turning this to a service
 
         //this has to be uncommented to read arguments from config
-//    	CommandLineParser parser = new DefaultParser();
-//        Options options = getOptions();
-//        try {
-//            CommandLine line = parser.parse(options, args);
-//            executeCommand(line);//posting forAudit on the wall.
-//        } catch (ParseException e) {
-//            System.err.println(e.getMessage());
-//            HelpFormatter formatter = new HelpFormatter();
-//            formatter.printHelp("BlockchainClient", options , true);
-//        }
+    	CommandLineParser parser = new DefaultParser();
+        Options options = getOptions();
+        try {
+            CommandLine line = parser.parse(options, args);
+            executeCommand(line);//posting forAudit on the wall.
+        } catch (ParseException e) {
+            System.err.println(e.getMessage());
+            HelpFormatter formatter = new HelpFormatter();
+            formatter.printHelp("BlockchainClient", options , true);
+        }
 
         SpringApplication app = new SpringApplication(BWorkflowGenericParticipant2.class);
         Map<String, Object> pro = Maps.newHashMap();
@@ -677,48 +677,25 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
           while(dummyData.length()<500) { 
           	dummyData+=""+n;
           }
-          //JWTMsg msg=new JWTMsg(dummyData, name, "Recipient", "http://localhost:"+recipientPort, new String[] {mostRecentAuditRecord}, new String[] {"ParaPrev1", "ParaPrev2"});
-        //Added to allow participant to send message without having to receive anything before(in case this should be considered.
-          if (first.equalsIgnoreCase("true")) {//first participant to publish
-        	  publishAuditRecord("key.priv","Prev1","HEWtNSfUAMKEitKc5MBThupdOTj98oV/VaLG9LbR5Ms=");
-              //  publishAuditRecord("key.priv","Prev2","HEWtNSfUAMKEitKc5MBThupdOTj98oV/VaLG9LbR5Ms=");
-                publishAuditRecord("key.priv","ParaPrev1","HEWtNSfUAMKEitKc5MBThupdOTj98oV/VaLG9LbR5Ms=");
-               // publishAuditRecord("key.priv","ParaPrev2","HEWtNSfUAMKEitKc5MBThupdOTj98oV/VaLG9LbR5Ms=");
-          }
-          /*JWTMsg msg;//Changing this one to eliminate un-necessary msg length
-          if(AuditRecsforReceivedMessages.isEmpty()) {
-          	 msg=new JWTMsg(dummyData, name, "Recipient", "http://localhost:"+recipientPort, new String[] {"Prev1"}, new String[] {"ParaPrev1", "ParaPrev2"});
-          }
-          else { msg=new JWTMsg(dummyData, name, "Recipient", "http://localhost:"+recipientPort, ArraylistToArray(AuditRecsforReceivedMessages), new String[] {"ParaPrev1", "ParaPrev2"});}
-          */
+
           
           JWTMsg msg;//Changing this one to eliminate un-necessary msg length
-          if(ReferenceofAuditRecsforReceivedMessages.isEmpty()) {//Here is the potential problem after ref. It needs to be ReferenceofAuditRecsforReceivedMessages
-        	  System.out.println("Comparing length "+ReferenceofAuditRecsforReceivedMessages.size()+AuditRecsforReceivedMessages.size());
-          	 /*//Use this for msg generation
-        	  msg=new JWTMsg(dummyData, name, recipientPort, "THis is a label", new String[] {"Prev1"}, new String[] {"ParaPrev1"});
-          	*/
+
           	msg=new JWTMsg(ToSend.to_send, name, recipientPort, "THis is a label", new String[] {"Prev1"}, new String[] {"ParaPrev1"});
-            
-          }
-          //else { msg=new JWTMsg(dummyData, name, recipientPort, "", ArraylistToArray(AuditRecsforReceivedMessages), new String[] {"ParaPrev1"});}
-          else {/*//Use this for msg generation
-         	 msg=new JWTMsg(dummyData, name, recipientPort, "", ArraylistToArray(ReferenceofAuditRecsforReceivedMessages), new String[] {"ParaPrev1"});
-          */
-        	  msg=new JWTMsg(ToSend.to_send, name, recipientPort, "", ArraylistToArray(ReferenceofAuditRecsforReceivedMessages), new String[] {"ParaPrev1"});
+
+        	 // msg=new JWTMsg(ToSend.to_send, name, recipientPort, "", ArraylistToArray(ReferenceofAuditRecsforReceivedMessages), new String[] {"ParaPrev1"});
           
-          }
-         
+
      	FileWriter fileWriter = new FileWriter(file_send,true);
       	long startTime = System.currentTimeMillis();
       	String URL="http://localhost:"+recipientPort+"/participant?publish=true";
       	System.out.println("URL: "+URL);
-          sendMessageToParticipant(URL, msg, "key.priv", "HEWtNSfUAMKEitKc5MBThupdOTj98oV/VaLG9LbR5Ms=", "client2", "server");
+          sendMessageToParticipant(URL, msg, "key.priv", "HEWtNSfUAMKEitKc5MBThupdOTj98oV/VaLG9LbR5Ms=", "client3", "server");
          
           long endTime = System.currentTimeMillis(); long duration = (endTime - startTime);
           //fileWriter.append(name+ " to "+recipientPort+","+duration+"\n");
           //fileWriter.append(name+ " to "+recipientPort+","+duration+","+SentMessageSize+","+AuditRecordsSize()+"\n");
-          fileWriter.append(name+ " to "+recipientPort+","+duration+","+UnencryptedSentMsglength+","+encryptedSentMsglength+","+SentMessageSize+","+AuditRecordsSize()+"\n");
+          fileWriter.append(name+ " to "+recipientPort+","+duration+","+UnencryptedSentMsglength+","+encryptedSentMsglength+","+SentMessageSize+","+"\n");
       	fileWriter.flush();
           fileWriter.close();
       }
