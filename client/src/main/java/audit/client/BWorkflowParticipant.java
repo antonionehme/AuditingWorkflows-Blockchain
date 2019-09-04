@@ -81,7 +81,7 @@ public class BWorkflowParticipant {//Added the extension hoping to get the servi
       static int SentMessageSize=0; static int ReceivedMessageSize=0;
       static int UnencryptedSentMsglength=0; static int encryptedSentMsglength=0;
       static JWTMsg globalmsg=new JWTMsg();
-    static KeyPair senderPair;
+    static KeyPair senderPair; static String keyName="";
 
     static {
         try {
@@ -402,7 +402,11 @@ public static void saveKey(String signature, String keychain, String keyname){
         	addPostedAuditRec("Added Local Record");
            option=scan.nextLine();}
            break;*/
-        case "0" :{//System.out.println(Files.readAllBytes(Paths.get("key.pub")));
+       case "ini" :{ini();
+                System.out.println("0 to Add Address, 1 to VerifyServer, 2 to see last reported record on the audit server, 3 to Publish a message, 4 Send a message to another recipient, 5 to Override Recipient Port,6 Send with clear , X to exit.");
+                option=scan.nextLine();}
+            break;
+            case "0" :{//System.out.println(Files.readAllBytes(Paths.get("key.pub")));
             System.out.println(senderPair.getPublic().toString());
             saveKey("xiaohu", senderPair.getPublic().toString(), "participant1");
             getKey("xiaohu", "0x48e46c23904a4785191719a43c889a3c8540011d", "participant1");

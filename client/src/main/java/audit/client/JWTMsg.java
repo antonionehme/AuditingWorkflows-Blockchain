@@ -102,6 +102,7 @@ public class JWTMsg {
 		}
 		
 		public JWTMsg(String toParse) throws net.minidev.json.parser.ParseException, JsonProcessingException, IOException {
+	  	// I think that we'll have to modify this one if we modify Build_JWT to include Sig.
 		JSONParser parser = new JSONParser(); 
 		JSONObject json = (JSONObject) parser.parse(toParse);
 		

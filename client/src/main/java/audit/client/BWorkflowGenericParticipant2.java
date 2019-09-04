@@ -81,6 +81,9 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
       static double mu=0; static double sigma=0;
       static int SentMessageSize=0; static int ReceivedMessageSize=0;
       static int UnencryptedSentMsglength=0; static int encryptedSentMsglength=0;
+    static JWTMsg globalmsg=new JWTMsg();
+    static KeyPair senderPair; static String keyPairName="";
+
 
     public static void main(String args[]) throws Exception {
 
@@ -126,6 +129,7 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
         //UseCommandLineOptions(); Need to copy the body and copy it to the main if this is to be used.
 
        // pullAudits();
+
         switchOptions();
     }
 
@@ -291,6 +295,7 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
         String p = line.getOptionValue("port");
         String n = line.getOptionValue("name");
         String rp= line.getOptionValue("recipientPort");
+        String kn= line.getOptionValue("keyPairName");
         if (port == null || name == null) {
             throw new ParseException("Missing Arguments");
         }
@@ -302,6 +307,14 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
         recipientPort=""+i;
         }
         else recipientPort= rp;
+
+        if(kn==null){
+            System.out.println("Default Key is client3");
+            keyPairName="client3";
+        }
+        else {
+            keyPairName=kn;
+        }
 
 
         /*if (recipientPort.equals("")) {
@@ -337,6 +350,12 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
                 .hasArg()
                 .argName("recipientPort")
                 .desc("For recipientPort")
+                .build());
+        options.addOption(Option.builder("kn")
+                .longOpt("keyPairName")
+                .hasArg()
+                .argName("keyPairName")
+                .desc("For keyPairName")
                 .build());
 
 
@@ -494,7 +513,14 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
            option=scan.nextLine();}
            break;*/
         case "0" :{
-        publishAddress("key.pub", name);//publishAddress("key.pub", "Antonio Nehme");
+            try {
+                senderPair = globalmsg.getKeyPairFromFile(keyPairName, "clientpw", clientpassphrase, "clientprivate");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            System.out.println(senderPair.getPublic().toString());
+            saveKey("xiaohu", senderPair.getPublic().toString(), keyPairName);
+            getKey("xiaohu", "0x48e46c23904a4785191719a43c889a3c8540011d", keyPairName);
         System.out.println("0 to Add Address, 1 to VerifyServer, 2 to see last reported record on the audit server, 3 to Publish a message, 4 Send a message to another recipient, 5 to Override Recipient Port, X to exit.");
         option=scan.nextLine();}
         break; 

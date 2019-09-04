@@ -58,8 +58,8 @@ public class BlockchainClientController {
 
     // public void getKey(String signature, String owner, String keyName, BigInteger keyType)
     @RequestMapping(value= "getKey", method = RequestMethod.POST)
-    void getKey(@RequestParam(required = true) String signature, @RequestParam(required = true) String owner, @RequestParam(required = true) String keyName) throws Exception {
-        BlockchainClient.getKey(signature,owner,keyName, BigInteger.valueOf(0));
+    String getKey(@RequestParam(required = true) String signature, @RequestParam(required = true) String owner, @RequestParam(required = true) String keyName) throws Exception {
+       return BlockchainClient.getKey(signature,owner,keyName, BigInteger.valueOf(0));
     }
 
     }

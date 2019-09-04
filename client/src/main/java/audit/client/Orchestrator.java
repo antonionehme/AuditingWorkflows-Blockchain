@@ -26,7 +26,7 @@ public class Orchestrator {
 	
 	 public static void ExecuteTopology() throws Exception {
 		 List<List<String>> records = new ArrayList<>();
-		 String Readfrom="/home/auditworkflow/IdeaProjects/AuditProject/topologies/552.csv";
+		 String Readfrom="/home/auditworkflow/IdeaProjects/AuditProject/topologies/552_1.csv";
 		 System.out.println(Readfrom);
 		 try (BufferedReader br = new BufferedReader(new FileReader(Readfrom))) {
 		  String line;
@@ -35,7 +35,7 @@ public class Orchestrator {
 		         String[] values = line.split(",");
 		         records.add(Arrays.asList(values));
 		         if(row>=1) {if (row==1) first="true";
-		         System.out.println("Sender: "+ TranslatetoPort(values[1])+" Receiver: "+  TranslatetoPort(values[2])+ " First: "+first);
+		         System.out.println("Sender: "+ TranslatetoPort(values[1])+" Receiver: "+  TranslatetoPort(values[2]));
 		         SendRequests(TranslatetoPort(values[1]), TranslatetoPort(values[2]), first);
 		         }row++;
 		     }

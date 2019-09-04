@@ -283,7 +283,7 @@ public class Web3JClientAPI2 {
         return "it's not a match";
     }
     /*get public keys from bockchain*/
-    public void getKey(String signature, String owner, String keyName,BigInteger keyType) {
+    public String getKey(String signature, String owner, String keyName,BigInteger keyType) {
         contractAddress = keyFactory.getContractAddress();  //single contract
         System.out.println("key contract address:"+contractAddress);
         if (contractAddress != null && credentials !=null) {
@@ -291,6 +291,7 @@ public class Web3JClientAPI2 {
                 keyFactory = KeyFactory.load(contractAddress,web3,credentials,GAS_PRICE,GAS_LIMIT);
                 String result = keyFactory.getKey(signature, owner, keyName, keyType).sendAsync().get(); // get keys from blockchain
                 System.out.println("the key is:" + result);
+                return "the key is: " + result;
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
@@ -299,5 +300,6 @@ public class Web3JClientAPI2 {
         } else {
             System.out.println("please check the smart contract KeyFactory deployment and credentials load");
         }
+        return "please check the smart contract KeyFactory deployment and credentials load";
     }
 }
