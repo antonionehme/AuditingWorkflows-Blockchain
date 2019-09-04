@@ -394,6 +394,7 @@ public static void saveKey(String signature, String keychain, String keyname){
 
     /////////////////////
     public static void switchOptions() throws Exception { Scanner scan=new Scanner(System.in);
+        senderPair = globalmsg.getKeyPairFromFile("client3", "clientpw", clientpassphrase, "clientprivate");
     System.out.println("0 to Add Address, 1 to VerifyServer, 2 to see last reported record on the audit server, 3 to Publish a message, 4 Send a message to another recipient, 5 to Override Recipient Port,6 Send with clear , X to exit.");
     	String option=scan.nextLine();
     	while(option!="X") {
@@ -594,7 +595,8 @@ public static void saveKey(String signature, String keychain, String keyname){
         }*/
         JWTMsg msg;
         msg=new JWTMsg(ToSend.to_send, name, recipientPort, "THis is a label", new String[] {"Prev1"}, new String[] {"ParaPrev1"});
-
+        msg.setSig(msg.sign(ToSend.to_send, senderPair.getPrivate()));//This method gets called from the generic class (with API calls.
+        //We, therefore, need to define a static variable in the generic class for this not to crash.
         //msg=new JWTMsg(ToSend.to_send, name, recipientPort, "", ArraylistToArray(ReferenceofAuditRecsforReceivedMessages), new String[] {"ParaPrev1"});
        
     	FileWriter fileWriter = new FileWriter(file_send,true);

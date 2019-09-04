@@ -84,6 +84,13 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
     static JWTMsg globalmsg=new JWTMsg();
     static KeyPair senderPair; static String keyPairName="";
 
+    static {
+        try {//This gets overriden later on. It's only for test cases.
+            senderPair = globalmsg.getKeyPairFromFile("client3", "clientpw", clientpassphrase, "clientprivate");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void main(String args[]) throws Exception {
 
@@ -503,7 +510,12 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
       }
       
       ///////////////////////////////////////////////////////
-      public static void switchOptions() throws Exception { Scanner scan=new Scanner(System.in);
+      public static void switchOptions() throws Exception { try {
+          senderPair = globalmsg.getKeyPairFromFile(keyPairName, "clientpw", clientpassphrase, "clientprivate");
+      } catch (Exception e) {
+          e.printStackTrace();
+      }
+          Scanner scan=new Scanner(System.in);
     System.out.println("0 to Add Address, 1 to VerifyServer, 2 to see last reported record on the audit server, 3 to Publish a message, 4 Send a message to another recipient, X to exit.");
     	String option=scan.nextLine();
     	while(option!="X") {
@@ -708,7 +720,8 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
           JWTMsg msg;//Changing this one to eliminate un-necessary msg length
 
           	msg=new JWTMsg(ToSend.to_send, name, recipientPort, "THis is a label", new String[] {"Prev1"}, new String[] {"ParaPrev1"});
-
+          msg.setSig(msg.sign(ToSend.to_send, senderPair.getPrivate()));
+          
         	 // msg=new JWTMsg(ToSend.to_send, name, recipientPort, "", ArraylistToArray(ReferenceofAuditRecsforReceivedMessages), new String[] {"ParaPrev1"});
           
 
