@@ -265,7 +265,7 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
         MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
         map.add("signature", "xiaohu");
         map.add("payload", VerifyAudit);// map.add("payload", "123");
-        map.add("owner", "0x48e46c23904a4785191719a43c889a3c8540011d");
+        map.add("owner", "0x1ad480699864888095f7271861e2c7af8700c0f9");
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
 
@@ -288,7 +288,7 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
         MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
         map.add("signature", "xiaohu");
         map.add("payload", forAudit);// map.add("payload", "123");
-        map.add("owner", "0x48e46c23904a4785191719a43c889a3c8540011d");
+        map.add("owner", "0x1ad480699864888095f7271861e2c7af8700c0f9");
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
 
@@ -429,7 +429,7 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
       	long startTime_recieve = System.currentTimeMillis();
       	
     	 // boolean verif=EncryptedAuditRecordverification(message,"client2");//Here's where the problem is. When this is commented, the message gets received.
-          compareLog("xiaohu", message, "0x48e46c23904a4785191719a43c889a3c8540011d");
+          compareLog("xiaohu", message, "0x1ad480699864888095f7271861e2c7af8700c0f9");
               msgPool.add(message);
 
          double delay=LogNormalbasedDelayGeneration.simulate_delay_time(constant, mu, sigma);
@@ -524,6 +524,10 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
         	addPostedAuditRec("Added Local Record");
            option=scan.nextLine();}
            break;*/
+            case "ini" :{ini();
+                System.out.println("0 to Add Address, 1 to VerifyServer, 2 to see last reported record on the audit server, 3 to Publish a message, 4 Send a message to another recipient, 5 to Override Recipient Port,6 Send with clear , X to exit.");
+                option=scan.nextLine();}
+            break;
         case "0" :{
             try {
                 senderPair = globalmsg.getKeyPairFromFile(keyPairName, "clientpw", clientpassphrase, "clientprivate");
@@ -532,7 +536,7 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
             }
             System.out.println(senderPair.getPublic().toString());
             saveKey("xiaohu", senderPair.getPublic().toString(), keyPairName);
-            getKey("xiaohu", "0x48e46c23904a4785191719a43c889a3c8540011d", keyPairName);
+            getKey("xiaohu", "0x1ad480699864888095f7271861e2c7af8700c0f9", keyPairName);
         System.out.println("0 to Add Address, 1 to VerifyServer, 2 to see last reported record on the audit server, 3 to Publish a message, 4 Send a message to another recipient, 5 to Override Recipient Port, X to exit.");
         option=scan.nextLine();}
         break; 
@@ -721,7 +725,7 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
 
           	msg=new JWTMsg(ToSend.to_send, name, recipientPort, "THis is a label", new String[] {"Prev1"}, new String[] {"ParaPrev1"});
           msg.setSig(msg.sign(ToSend.to_send, senderPair.getPrivate()));
-          
+
         	 // msg=new JWTMsg(ToSend.to_send, name, recipientPort, "", ArraylistToArray(ReferenceofAuditRecsforReceivedMessages), new String[] {"ParaPrev1"});
           
 

@@ -101,9 +101,9 @@ public class BWorkflowParticipant {//Added the extension hoping to get the servi
    // String JWTEncMsg= msg.ArraytoStringCleanCut(msg.encrypt_long(msg.Split_to_List(msg.Plain_JWT(msg)), receiverPair.getPublic()));/
 
     saveKey("xiaohu","","y");
-    getKey("xiaohu", "0x48e46c23904a4785191719a43c889a3c8540011d", "y");
+    getKey("xiaohu", "0x1ad480699864888095f7271861e2c7af8700c0f9", "y");
     saveLog("xiaohu", msg);
-    //compareLogold("xiaohu", msg, "0x48e46c23904a4785191719a43c889a3c8540011d");
+    //compareLogold("xiaohu", msg, "0x1ad480699864888095f7271861e2c7af8700c0f9");
 
 
 */
@@ -206,7 +206,7 @@ public class BWorkflowParticipant {//Added the extension hoping to get the servi
       	long startTime_recieve = System.currentTimeMillis();
       	
     	  //boolean verif=EncryptedAuditRecordverification(message,"client2");//Here's where the problem is. When this is commented, the message gets received. (solved)
-           compareLog("xiaohu", message, "0x48e46c23904a4785191719a43c889a3c8540011d");
+           compareLog("xiaohu", message, "0x1ad480699864888095f7271861e2c7af8700c0f9");
               msgPool.add(message);
 
          double delay=LogNormalbasedDelayGeneration.simulate_delay_time(constant, mu, sigma);
@@ -360,7 +360,7 @@ public static void saveKey(String signature, String keychain, String keyname){
         MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
         map.add("signature", "xiaohu");
         map.add("payload", VerifyAudit);// map.add("payload", "123");
-        map.add("owner", "0x48e46c23904a4785191719a43c889a3c8540011d");
+        map.add("owner", "0x1ad480699864888095f7271861e2c7af8700c0f9");
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
 
@@ -382,7 +382,7 @@ public static void saveKey(String signature, String keychain, String keyname){
         MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
         map.add("signature", "xiaohu");
         map.add("payload", forAudit);// map.add("payload", "123");
-        map.add("owner", "0x48e46c23904a4785191719a43c889a3c8540011d");
+        map.add("owner", "0x1ad480699864888095f7271861e2c7af8700c0f9");
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
 
@@ -410,7 +410,7 @@ public static void saveKey(String signature, String keychain, String keyname){
             case "0" :{//System.out.println(Files.readAllBytes(Paths.get("key.pub")));
             System.out.println(senderPair.getPublic().toString());
             saveKey("xiaohu", senderPair.getPublic().toString(), "participant1");
-            getKey("xiaohu", "0x48e46c23904a4785191719a43c889a3c8540011d", "participant1");
+            getKey("xiaohu", "0x1ad480699864888095f7271861e2c7af8700c0f9", "participant1");
            // System.out.println(senderPair.getPublic().toString());
         //publishAddress("key.pub", "Antonio Nehme");//publishAddress("key.pub", "Antonio Nehme");
         System.out.println("0 to Add Address, 1 to VerifyServer, 2 to see last reported record on the audit server, 3 to Publish a message, 4 Send a message to another recipient, 5 to Override Recipient Port,6 Send with clear , X to exit.");

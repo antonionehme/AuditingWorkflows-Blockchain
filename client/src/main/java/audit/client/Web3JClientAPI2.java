@@ -87,11 +87,11 @@ public class Web3JClientAPI2 {
         /*accounts password for ethClient
          * [0] password:123, [1] password:123456, [2] password: password@1; [3] password: password@2
          * new others are '123'*/
-        web3 = Web3j.build(new HttpService("http://127.0.0.1:8546/"));
+        web3 = Web3j.build(new HttpService("http://127.0.0.1:8547/"));
 
         connectEthClient();
         /*-------------------call functions of accounts management in the ethereum client or nodes--------*/
-        //admin = Admin.build(new HttpService("http://127.0.0.1:8546/"));
+        //admin = Admin.build(new HttpService("http://127.0.0.1:8547/"));
         //createNewAccount();
         //getAccountList();
 
@@ -105,8 +105,8 @@ public class Web3JClientAPI2 {
         //saveKey("xiaohu", "12gubv233f123g3", "workflow", BigInteger.valueOf(0));
         //saveKey("xiaohu", "test", "workflow1", BigInteger.valueOf(0));
         //saveKey("xiaohu","nodeKey","participant1", BigInteger.valueOf(1));
-       //compareLog("xiaohu", "12", "0x48e46c23904a4785191719a43c889a3c8540011d");
-        //getKey("xiaohu", "0x48e46c23904a4785191719a43c889a3c8540011d", "workflow1", BigInteger.valueOf(0));
+       //compareLog("xiaohu", "12", "0x1ad480699864888095f7271861e2c7af8700c0f9");
+        //getKey("xiaohu", "0x1ad480699864888095f7271861e2c7af8700c0f9", "workflow1", BigInteger.valueOf(0));
     }
 
     public void connectEthClient() {
@@ -124,13 +124,13 @@ public class Web3JClientAPI2 {
     public void wallet(){
         try {
             /* wallet creation - create a new account*/
-            file = new File("/home/auditworkflow/private/geth/chaindata/keystore");
+            file = new File("/home/auditworkflow/privateBlockchain/keystore");
             //password = "password@1";
             fileName = WalletUtils.generateFullNewWalletFile(password, file);
             System.out.println("wallet name:" +fileName);
 
             /*load wallet */
-            credentials = WalletUtils.loadCredentials(password, "/home/auditworkflow/private/geth/chaindata/keystore/"+fileName);
+            credentials = WalletUtils.loadCredentials(password, "/home/auditworkflow/privateBlockchain/keystore/"+fileName);
             System.out.println("credential address:" + credentials.getAddress());
 
             BigInteger publicKey = credentials.getEcKeyPair().getPublicKey();
@@ -152,8 +152,8 @@ public class Web3JClientAPI2 {
     /* -------------------------------------simple transaction test: transfer some ether--------------------------------*/
     public void transaction() {
         try {
-            credentials = WalletUtils.loadCredentials(password, "/home/auditworkflow/private/geth/chaindata/keystore/UTC--2019-08-20T08-55-08.001386110Z--48e46c23904a4785191719a43c889a3c8540011d");
-            TransactionReceipt transactionReceipt = Transfer.sendFunds(web3, credentials, "0x6a847d9c654020edbf7ada6c3e8ebfb5746265b1", BigDecimal.ONE, Convert.Unit.FINNEY).send();
+            credentials = WalletUtils.loadCredentials(password, "/home/auditworkflow/privateBlockchain/keystore/UTC--2019-09-05T09-49-38.426450393Z--1ad480699864888095f7271861e2c7af8700c0f9");
+            TransactionReceipt transactionReceipt = Transfer.sendFunds(web3, credentials, "", BigDecimal.ONE, Convert.Unit.FINNEY).send();
             System.out.println("transaction hash:" + transactionReceipt.getTransactionHash() + "-from:" + transactionReceipt.getFrom() + "-to:" + transactionReceipt.getTo() + "-status:" + transactionReceipt.getStatus());
         } catch (IOException | CipherException | InterruptedException | TransactionException e) {
             e.printStackTrace();
@@ -196,7 +196,7 @@ public class Web3JClientAPI2 {
     public void deployContract() {
 
         try {
-            credentials = WalletUtils.loadCredentials(password, "/home/auditworkflow/private/geth/chaindata/keystore/UTC--2019-08-20T08-55-08.001386110Z--48e46c23904a4785191719a43c889a3c8540011d");
+            credentials = WalletUtils.loadCredentials(password, "/home/auditworkflow/privateBlockchain/keystore/UTC--2019-09-05T09-49-38.426450393Z--1ad480699864888095f7271861e2c7af8700c0f9");
 
             safeMath = SafeMath.deploy(web3, credentials, GAS_PRICE, GAS_LIMIT).send();
             System.out.println("safeMath contractAddress: "+safeMath.getContractAddress());
@@ -225,7 +225,7 @@ public class Web3JClientAPI2 {
             try {
                 //logFactory = LogFactory.load(contractAddress,web3,credentials,GAS_PRICE,GAS_LIMIT);
                 TransactionReceipt transactionReceipt = logFactory.saveLog(signature, encryptedMessage, BigInteger.valueOf(30000)).send(); //trigger with smart contract saveKey()
-                List<String> list = logFactory.getLogIdByOwner("0x48e46c23904a4785191719a43c889a3c8540011d").sendAsync().get(); //show all exiting logs id from blockchain
+                List<String> list = logFactory.getLogIdByOwner("0x1ad480699864888095f7271861e2c7af8700c0f9").sendAsync().get(); //show all exiting logs id from blockchain
 
                 //System.out.println("transaction hash:" +transactionReceipt.getTransactionHash());
                 System.out.println("Log is Saved OK:"+transactionReceipt.isStatusOK());
@@ -251,7 +251,7 @@ public class Web3JClientAPI2 {
                 System.out.println("Key is Saved OK:"+transactionReceipt.isStatusOK());
                 System.out.println("system log is:"+transactionReceipt.getLogs());
 
-                List<String> l = keyFactory.getKeyIdByOwner("0x48e46c23904a4785191719a43c889a3c8540011d").sendAsync().get();
+                List<String> l = keyFactory.getKeyIdByOwner("0x1ad480699864888095f7271861e2c7af8700c0f9").sendAsync().get();
                 System.out.println("keys id are:"+l);
                 return "System log is:"+transactionReceipt.getLogs();
             } catch (IOException | CipherException e) {
