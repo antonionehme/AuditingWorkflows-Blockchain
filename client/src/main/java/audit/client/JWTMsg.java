@@ -125,6 +125,35 @@ public class JWTMsg {
 		
 		//this.ParaPrev=(String[]) json.get("ParaPrev");
 		}
+
+	public JWTMsg(String toParse, boolean b) throws net.minidev.json.parser.ParseException, JsonProcessingException, IOException {
+		// I think that we'll have to modify this one if we modify Build_JWT to include Sig.
+		if(b=true){
+		JSONParser parser = new JSONParser();
+		JSONObject json = (JSONObject) parser.parse(toParse);
+
+		//json.getAsString(key)
+		this.Data=json.getAsString("Data");
+		this.Iss=json.getAsString("iss");
+		this.Rec=json.getAsString("Rec");
+		this.Label=json.getAsString("Label");
+
+		//Get Prev as string and parse it
+		//PPrev and ParaPred are CypherTextx.
+		String PrevParser=json.get("Prev").toString();
+		PrevParser=PrevParser.substring(2, PrevParser.length()-2);
+		String[] parts = PrevParser.split("\",\"");
+		this.Prev=parts;
+
+		String ParaPrevParser=json.get("ParaPrev").toString();
+		ParaPrevParser=ParaPrevParser.substring(2, ParaPrevParser.length()-2);
+		String[] ParaParts = ParaPrevParser.split("\",\"");
+		this.ParaPrev=ParaParts;
+		this.Sig=json.getAsString("Sig");
+		//this.ParaPrev=(String[]) json.get("ParaPrev");
+			}
+
+	}
 		
 
 		public String getData() {
@@ -139,8 +168,8 @@ public class JWTMsg {
 			return Iss;
 		}
 
-		public void setSig(String iss) {
-			Sig = Sig;
+		public void setSig(String sig) {
+			Sig = sig;
 		}
 
 		public String getSig() {
