@@ -66,7 +66,7 @@ public class JWTMsg {
 	  static private final String serverpassphrase = "serverpw";
 	  
 	  private String Data, Iss, Rec, Label;
-	  private String Sig="";
+	  private String Sig="ANtonio";//ToSend.Sig;
 	  private String[] Prev, ParaPrev;
 	  
 	  public JWTMsg() {
@@ -128,7 +128,7 @@ public class JWTMsg {
 
 	public JWTMsg(String toParse, boolean b) throws net.minidev.json.parser.ParseException, JsonProcessingException, IOException {
 		// I think that we'll have to modify this one if we modify Build_JWT to include Sig.
-		if(b=true){
+		if(b=true){System.out.println("Here");
 		JSONParser parser = new JSONParser();
 		JSONObject json = (JSONObject) parser.parse(toParse);
 
@@ -149,7 +149,7 @@ public class JWTMsg {
 		ParaPrevParser=ParaPrevParser.substring(2, ParaPrevParser.length()-2);
 		String[] ParaParts = ParaPrevParser.split("\",\"");
 		this.ParaPrev=ParaParts;
-		this.Sig=json.getAsString("Sig");
+		this.Sig=ToSend.Sig;//json.getAsString("Sig");
 		//this.ParaPrev=(String[]) json.get("ParaPrev");
 			}
 

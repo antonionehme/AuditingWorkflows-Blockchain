@@ -342,7 +342,7 @@ public static void saveKey(String signature, String keychain, String keyname){
     public static void compareLog(String signature, String EncryptedReceivedMsg, String owner) throws Exception {
         JWTMsg m=new JWTMsg();
         PublicKey auditPublic =m.getKeyPairFromFile("server", "serverpw", serverpassphrase, "serverprivate").getPublic();
-        KeyPair receiverPair =m.getKeyPairFromFile("client2", "clientpw", clientpassphrase, "clientprivate");
+        KeyPair receiverPair =m.getKeyPairFromFile("client3", "clientpw", clientpassphrase, "clientprivate");
         //String JWTEncMsg= msg.Enc_JWT(msg,(RSAPublicKey)receiverPair.getPublic());
         //There is a slight different between this and the generic one. Here we seem to to have the urge to clean the array.
         String receivedMsg= m.Dec_JWT(EncryptedReceivedMsg, (RSAPrivateKey)receiverPair.getPrivate());

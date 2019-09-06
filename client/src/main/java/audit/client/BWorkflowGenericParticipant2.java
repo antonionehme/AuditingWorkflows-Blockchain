@@ -82,15 +82,15 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
       static int SentMessageSize=0; static int ReceivedMessageSize=0;
       static int UnencryptedSentMsglength=0; static int encryptedSentMsglength=0;
     static JWTMsg globalmsg=new JWTMsg();
-    static KeyPair senderPair; static String keyPairName="";
+    static KeyPair senderPair, MsgSenderPair; static String keyPairName="";
 
-   /*static {
+   static {
         try {//This gets overriden later on. It's only for test cases.
-            senderPair = globalmsg.getKeyPairFromFile("client3", "clientpw", clientpassphrase, "clientprivate");
+            MsgSenderPair = globalmsg.getKeyPairFromFile("client3", "clientpw", clientpassphrase, "clientprivate");
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }*/
+    }
 
     public static void main(String args[]) throws Exception {
 
@@ -236,10 +236,10 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
         System.out.println(httpresponse);
     }
 
-    public static void compareLog(String signature, String EncryptedReceivedMsg, String owner) throws Exception {
+    public static void compareLog(String signature, String DecryptedReceivedMsg, String owner) throws Exception {
         JWTMsg m=new JWTMsg();
         PublicKey auditPublic =m.getKeyPairFromFile("server", "serverpw", serverpassphrase, "serverprivate").getPublic();
-        KeyPair receiverPair =m.getKeyPairFromFile("client3", "clientpw", clientpassphrase, "clientprivate");
+        /*KeyPair receiverPair =m.getKeyPairFromFile("client3", "clientpw", clientpassphrase, "clientprivate");
         //String JWTEncMsg= msg.Enc_JWT(msg,(RSAPublicKey)receiverPair.getPublic());
         //There is a slight different between this and the generic one. Here we seem to to have the urge to clean the array.
 
@@ -248,11 +248,11 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
         //System.out.println("1");
         //	String receivedMsgArrayDecrypt[]= m.decrypt_long(receivedMsgArray, (RSAPrivateKey)receiverPair.getPrivate());
         //System.out.println("2- Problem seems to be here.");
-        String receivedMsg=m.ArraytoString(m.decrypt_long(receivedMsgArray, (RSAPrivateKey)receiverPair.getPrivate()));
+        String receivedMsg=m.ArraytoString(m.decrypt_long(receivedMsgArray, (RSAPrivateKey)receiverPair.getPrivate()));*/
 
         //String receivedMsg= m.Dec_JWT(EncryptedReceivedMsg, (RSAPrivateKey)receiverPair.getPrivate());
-        System.out.println("Received Msg After Decrypt:" +receivedMsg);
-        String VerifyAudit=m.ArraytoStringCleanCut(m.encrypt_long(m.Split_to_List(receivedMsg), auditPublic));
+        System.out.println("Received Msg After Decrypt:" +DecryptedReceivedMsg);
+        String VerifyAudit=m.ArraytoStringCleanCut(m.encrypt_long(m.Split_to_List(DecryptedReceivedMsg), auditPublic));
 
         ////
         String url = "http://localhost:8333/Bclient/compareLog";
@@ -425,14 +425,24 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
     	  ReceivedMessageSize=message.length()/343;
     	  System.out.println("ReceivedMsgSize= "+ message.length()+ " which is equivalent to "+  message.length()/343+ "Unit(s)");
         //added
+          JWTMsg m=new JWTMsg();
 
     	  FileWriter fileWriter_recieve = new FileWriter(file_recieve,true);
     	//  FileWriter fileWriter_combo = new FileWriter(file_combo,true);
       	long startTime_recieve = System.currentTimeMillis();
-      	
+
+          KeyPair receiverPair =m.getKeyPairFromFile("client3", "clientpw", clientpassphrase, "clientprivate");
+
+          String[] receivedMsgArray=m.StringCleanCuttoArray(message);///////////////////
+          String receivedMsg=m.ArraytoString(m.decrypt_long(receivedMsgArray, (RSAPrivateKey)receiverPair.getPrivate()));
+          m=new JWTMsg(receivedMsg, true);
+          //System.out.println("Received "+m.toString());
+          System.out.println("Sig "+m.getSig());
+          System.out.println("Verifying the signature=" + m.verify(m.getData(), m.getSig(), MsgSenderPair.getPublic()));
+
     	 // boolean verif=EncryptedAuditRecordverification(message,"client2");//Here's where the problem is. When this is commented, the message gets received.
-          compareLog("xiaohu", message, "0x1ad480699864888095f7271861e2c7af8700c0f9");
-              msgPool.add(message);
+          compareLog("xiaohu", receivedMsg, "0x1ad480699864888095f7271861e2c7af8700c0f9");
+              msgPool.add(message);//
 
          double delay=LogNormalbasedDelayGeneration.simulate_delay_time(constant, mu, sigma);
         		 
@@ -724,13 +734,14 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
 
           
           JWTMsg msg;//Changing this one to eliminate un-necessary msg length
-    String s=globalmsg.sign(ToSend.to_send, senderPair.getPrivate());
-    System.out.println("Signature "+s);
+    //String s=globalmsg.sign(ToSend.to_send, senderPair.getPrivate());
+    //System.out.println("Signature "+s);
     //added the signature to the msg
-          	msg=new JWTMsg(ToSend.to_send, name, recipientPort, "THis is a label", new String[] {"Prev1"}, new String[] {"ParaPrev1"},s);
+          	msg=new JWTMsg(ToSend.to_send, name, recipientPort, "THis is a label", new String[] {"Prev1"}, new String[] {"ParaPrev1"});
           	//System.out.println("Before Sending "+msg.);
-       //   msg.setSig(msg.sign(ToSend.to_send, senderPair.getPrivate()));
-
+          msg.setSig(msg.sign(ToSend.to_send, senderPair.getPrivate()));
+            System.out.println("Sig" +msg.sign(ToSend.to_send, senderPair.getPrivate()));
+         // System.out.println("GetSig" + msg.getSig());
         	 // msg=new JWTMsg(ToSend.to_send, name, recipientPort, "", ArraylistToArray(ReferenceofAuditRecsforReceivedMessages), new String[] {"ParaPrev1"});
           
 
