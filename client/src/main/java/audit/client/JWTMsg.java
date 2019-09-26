@@ -66,8 +66,8 @@ public class JWTMsg {
 	  static private final String serverpassphrase = "serverpw";
 	  
 	  private String Data, Iss, Rec, Label;
-	  private String Sig="ANtonio";//ToSend.Sig;
 	  private String[] Prev, ParaPrev;
+    private String Sig="ANtonio";//ToSend.Sig;
 	  
 	  public JWTMsg() {
 		  
@@ -342,12 +342,12 @@ public class JWTMsg {
 	
     public static KeyPair getKeyPairFromFile(String client, String pass, String passphrase, String alias) throws Exception {//Added by me to use files
         clientKeyStore = KeyStore.getInstance( "JKS" );
-        clientKeyStore.load( new FileInputStream( "/home/auditworkflow/IdeaProjects/AuditProject/client/src/main/java/audit/client/"+client+".public" ),
+        clientKeyStore.load( new FileInputStream( "C:\\Users\\ID126219\\OneDrive - Birmingham City University\\Coding\\AuditProject-WithBlockchain\\AuditProject\\client\\src\\main\\java\\audit\\client\\"+client+".public" ),
                            "public".toCharArray() );
         /*clientKeyStore.load( new FileInputStream( "C:\\Users\\ID126219\\OneDrive - Birmingham City University\\Coding\\eclipse-workspace-audit-paper\\AuditProject\\AuditProject\\client\\src\\main\\java\\audit\\client\\"+client+".public" ),
                 "pub".toCharArray() );//change from .public to .pub */
 
-        clientKeyStore.load( new FileInputStream( "/home/auditworkflow/IdeaProjects/AuditProject/client/src/main/java/audit/client/"+client+".private" ),
+        clientKeyStore.load( new FileInputStream( "C:\\Users\\ID126219\\OneDrive - Birmingham City University\\Coding\\AuditProject-WithBlockchain\\AuditProject\\client\\src\\main\\java\\audit\\client\\"+client+".private" ),
               passphrase.toCharArray() );//clientpassphrase.toCharArray() ); changed from private to priv
        
         KeyStore.PasswordProtection keyPassword =       //Key password

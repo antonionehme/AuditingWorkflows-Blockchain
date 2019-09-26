@@ -49,6 +49,14 @@ public class BlockchainClientController {
        return BlockchainClient.compareLog(signature, payload, owner);
     }
 
+    @RequestMapping(value= "compareLogH", method = RequestMethod.POST)
+        //void compareLog(@RequestBody String signature, @RequestParam(required = true) String payload, @RequestParam(required = true) String owner) throws Exception {
+    String compareLogH(@RequestParam(required = true) String signature, @RequestParam(required = true) String HashOfpayload, @RequestParam(required = true) String owner) throws Exception {
+       // payload = DigestUtils.sha256Hex(payload);  //calculate hash of received payload before comparison
+        return BlockchainClient.compareLog(signature, HashOfpayload, owner);
+    }
+
+
     @RequestMapping(value= "saveKey", method = RequestMethod.POST)
     //void saveKey(@RequestBody String signature, @RequestParam(required = true) String keyChain, @RequestParam(required = true) String keyName, BigInteger keyType) throws Exception {
     String saveKey(@RequestParam(required = true) String signature, @RequestParam(required = true) String keyChain, @RequestParam(required = true) String keyName) throws Exception {

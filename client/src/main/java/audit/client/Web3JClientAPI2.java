@@ -84,7 +84,7 @@ public class Web3JClientAPI2 {
 
     }
     public void runAPI() {
-        /*accounts password for ethClient
+        /*accounts password forini ethClient
          * [0] password:123, [1] password:123456, [2] password: password@1; [3] password: password@2
          * new others are '123'*/
         web3 = Web3j.build(new HttpService("http://127.0.0.1:8547/"));
@@ -152,7 +152,7 @@ public class Web3JClientAPI2 {
     /* -------------------------------------simple transaction test: transfer some ether--------------------------------*/
     public void transaction() {
         try {
-            credentials = WalletUtils.loadCredentials(password, "/home/auditworkflow/privateBlockchain/keystore/UTC--2019-09-05T09-49-38.426450393Z--1ad480699864888095f7271861e2c7af8700c0f9");
+            credentials = WalletUtils.loadCredentials(password, "C:\\Users\\ID126219\\Documents\\Geth\\keystore\\UTC--2019-09-09T18-58-34.977049100Z--6cd4ed864683f53500ac19e0f5b72eeeeb99622c");
             TransactionReceipt transactionReceipt = Transfer.sendFunds(web3, credentials, "", BigDecimal.ONE, Convert.Unit.FINNEY).send();
             System.out.println("transaction hash:" + transactionReceipt.getTransactionHash() + "-from:" + transactionReceipt.getFrom() + "-to:" + transactionReceipt.getTo() + "-status:" + transactionReceipt.getStatus());
         } catch (IOException | CipherException | InterruptedException | TransactionException e) {
@@ -196,7 +196,7 @@ public class Web3JClientAPI2 {
     public void deployContract() {
 
         try {
-            credentials = WalletUtils.loadCredentials(password, "/home/auditworkflow/privateBlockchain/keystore/UTC--2019-09-05T09-49-38.426450393Z--1ad480699864888095f7271861e2c7af8700c0f9");
+            credentials = WalletUtils.loadCredentials(password, "C:\\Users\\ID126219\\Documents\\Geth\\keystore\\UTC--2019-09-11T09-54-10.301868600Z--80bd8b0e1cd2f6c4fffdac470be4ab9c7006c7a8");
 
             safeMath = SafeMath.deploy(web3, credentials, GAS_PRICE, GAS_LIMIT).send();
             System.out.println("safeMath contractAddress: "+safeMath.getContractAddress());
@@ -225,7 +225,7 @@ public class Web3JClientAPI2 {
             try {
                 //logFactory = LogFactory.load(contractAddress,web3,credentials,GAS_PRICE,GAS_LIMIT);
                 TransactionReceipt transactionReceipt = logFactory.saveLog(signature, encryptedMessage, BigInteger.valueOf(30000)).send(); //trigger with smart contract saveKey()
-                List<String> list = logFactory.getLogIdByOwner("0x1ad480699864888095f7271861e2c7af8700c0f9").sendAsync().get(); //show all exiting logs id from blockchain
+                List<String> list = logFactory.getLogIdByOwner("0x80bd8b0e1cd2f6c4fffdac470be4ab9c7006c7a8").sendAsync().get(); //show all exiting logs id from blockchain
 
                 //System.out.println("transaction hash:" +transactionReceipt.getTransactionHash());
                 System.out.println("Log is Saved OK:"+transactionReceipt.isStatusOK());
@@ -251,7 +251,7 @@ public class Web3JClientAPI2 {
                 System.out.println("Key is Saved OK:"+transactionReceipt.isStatusOK());
                 System.out.println("system log is:"+transactionReceipt.getLogs());
 
-                List<String> l = keyFactory.getKeyIdByOwner("0x1ad480699864888095f7271861e2c7af8700c0f9").sendAsync().get();
+                List<String> l = keyFactory.getKeyIdByOwner("0x80bd8b0e1cd2f6c4fffdac470be4ab9c7006c7a8").sendAsync().get();
                 System.out.println("keys id are:"+l);
                 return "System log is:"+transactionReceipt.getLogs();
             } catch (IOException | CipherException e) {
@@ -272,7 +272,8 @@ public class Web3JClientAPI2 {
             try {
                 //logFactory = LogFactory.load(contractAddress,web3,credentials,GAS_PRICE,GAS_LIMIT);
                 Boolean b = logFactory.compareLogs(signature, payload, owner).sendAsync().get();  // trigger with verification
-                System.out.println("is match ? "+b);
+                //System.out.println("Payload and sig"+signature+ " " + payload);
+                //System.out.println("is match ? "+b);
                 return "it's a match";
             } catch (Exception e) {
                 e.printStackTrace();

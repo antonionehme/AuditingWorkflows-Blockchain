@@ -40,6 +40,7 @@ import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import org.apache.commons.codec.digest.DigestUtils;
 import java.math.BigInteger;
 
 
@@ -215,7 +216,8 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
         String url = "http://localhost:8333/Bclient/saveLog";
         // msg.toString()
         KeyPair auditPair =msg.getKeyPairFromFile("server", "serverpw", serverpassphrase, "serverprivate");
-        String forAudit=msg.ArraytoString(msg.encrypt_long(msg.Split_to_List(msg.Plain_JWT(msg)), auditPair.getPublic()));
+       // String forAudit=msg.ArraytoString(msg.encrypt_long(msg.Split_to_List(msg.Plain_JWT(msg)), auditPair.getPublic()));
+        String JWTEncAudit= msg.ArraytoStringCleanCut(msg.encrypt_long(msg.Split_to_List(msg.Plain_JWT(msg)), auditPair.getPublic()));
         //String DecJWT= msg.Dec_JWT(JWTEncMsg, (RSAPrivateKey)auditPair.getPrivate());
 
 
@@ -227,7 +229,135 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
         MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
         map.add("signature", signature);
         //map.add("encryptedMessage", encryptedMessage);
-        map.add("encryptedMessage", forAudit);
+        map.add("encryptedMessage", JWTEncAudit);
+
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+
+        ResponseEntity<String> httpresponse =
+                restTemplate.postForEntity( url, request , String.class );
+        System.out.println(httpresponse);
+    }
+
+    public static void saveLogtoString(String signature, JWTMsg msg) throws Exception {
+        String url = "http://localhost:8333/Bclient/saveLog";
+        // msg.toString()
+        KeyPair auditPair =msg.getKeyPairFromFile("server", "serverpw", serverpassphrase, "serverprivate");
+        // String forAudit=msg.ArraytoString(msg.encrypt_long(msg.Split_to_List(msg.Plain_JWT(msg)), auditPair.getPublic()));
+        String JWTEncAudit= msg.ArraytoStringCleanCut(msg.encrypt_long(msg.Split_to_List(msg.Plain_JWT(msg).toString()), auditPair.getPublic()));
+        //String DecJWT= msg.Dec_JWT(JWTEncMsg, (RSAPrivateKey)auditPair.getPrivate());
+
+
+        //keyChain=12&keyName=y&keyType=0
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
+        map.add("signature", signature);
+        //map.add("encryptedMessage", encryptedMessage);
+        map.add("encryptedMessage", JWTEncAudit);
+
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+
+        ResponseEntity<String> httpresponse =
+                restTemplate.postForEntity( url, request , String.class );
+        System.out.println(httpresponse);
+    }
+    public static void saveLogString(String signature, String s) throws Exception {
+        String url = "http://localhost:8333/Bclient/saveLog";
+        // msg.toString()
+//        KeyPair auditPair =msg.getKeyPairFromFile("server", "serverpw", serverpassphrase, "serverprivate");
+//        // String forAudit=msg.ArraytoString(msg.encrypt_long(msg.Split_to_List(msg.Plain_JWT(msg)), auditPair.getPublic()));
+//        String JWTEncAudit= msg.ArraytoStringCleanCut(msg.encrypt_long(msg.Split_to_List(msg.Plain_JWT(msg).toString()), auditPair.getPublic()));
+//        //String DecJWT= msg.Dec_JWT(JWTEncMsg, (RSAPrivateKey)auditPair.getPrivate());
+//
+
+        //keyChain=12&keyName=y&keyType=0
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
+        map.add("signature", signature);
+        //map.add("encryptedMessage", encryptedMessage);
+        map.add("encryptedMessage", s);
+
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+
+        ResponseEntity<String> httpresponse =
+                restTemplate.postForEntity( url, request , String.class );
+        System.out.println(httpresponse);
+    }
+
+    public static void compareLogString(String signature, String s, String owner) throws Exception {
+//        JWTMsg m=new JWTMsg();
+//        PublicKey auditPublic =m.getKeyPairFromFile("server", "serverpw", serverpassphrase, "serverprivate").getPublic();
+        /*KeyPair receiverPair =m.getKeyPairFromFile("client3", "clientpw", clientpassphrase, "clientprivate");
+        //String JWTEncMsg= msg.Enc_JWT(msg,(RSAPublicKey)receiverPair.getPublic());
+        //There is a slight different between this and the generic one. Here we seem to to have the urge to clean the array.
+
+        String[] receivedMsgArray=m.StringCleanCuttoArray(EncryptedReceivedMsg);///////////////////
+
+        //System.out.println("1");
+        //	String receivedMsgArrayDecrypt[]= m.decrypt_long(receivedMsgArray, (RSAPrivateKey)receiverPair.getPrivate());
+        //System.out.println("2- Problem seems to be here.");
+        String receivedMsg=m.ArraytoString(m.decrypt_long(receivedMsgArray, (RSAPrivateKey)receiverPair.getPrivate()));*/
+
+        //String receivedMsg= m.Dec_JWT(EncryptedReceivedMsg, (RSAPrivateKey)receiverPair.getPrivate());
+//        System.out.println("Received Msg After Decrypt:" +DecryptedReceivedMsg);
+//        String VerifyAudit=m.ArraytoStringCleanCut(m.encrypt_long(m.Split_to_List(DecryptedReceivedMsg), auditPublic));
+
+        ////
+        String url = "http://localhost:8333/Bclient/compareLog";
+
+        //keyChain=12&keyName=y&keyType=0
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
+        map.add("signature", "xiaohu");
+        map.add("payload", s);// map.add("payload", "123");
+        map.add("owner", "0x492444fd2216400ed15521a5f69d25262b73a288");
+
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+
+        ResponseEntity<String> httpresponse =
+                restTemplate.postForEntity( url, request , String.class );
+        System.out.println(httpresponse);
+    }
+
+    public static void compareLogHash(String signature, String s, String owner) throws Exception {
+//        JWTMsg m=new JWTMsg();
+//        PublicKey auditPublic =m.getKeyPairFromFile("server", "serverpw", serverpassphrase, "serverprivate").getPublic();
+        /*KeyPair receiverPair =m.getKeyPairFromFile("client3", "clientpw", clientpassphrase, "clientprivate");
+        //String JWTEncMsg= msg.Enc_JWT(msg,(RSAPublicKey)receiverPair.getPublic());
+        //There is a slight different between this and the generic one. Here we seem to to have the urge to clean the array.
+
+        String[] receivedMsgArray=m.StringCleanCuttoArray(EncryptedReceivedMsg);///////////////////
+
+        //System.out.println("1");
+        //	String receivedMsgArrayDecrypt[]= m.decrypt_long(receivedMsgArray, (RSAPrivateKey)receiverPair.getPrivate());
+        //System.out.println("2- Problem seems to be here.");
+        String receivedMsg=m.ArraytoString(m.decrypt_long(receivedMsgArray, (RSAPrivateKey)receiverPair.getPrivate()));*/
+
+        //String receivedMsg= m.Dec_JWT(EncryptedReceivedMsg, (RSAPrivateKey)receiverPair.getPrivate());
+//        System.out.println("Received Msg After Decrypt:" +DecryptedReceivedMsg);
+//        String VerifyAudit=m.ArraytoStringCleanCut(m.encrypt_long(m.Split_to_List(DecryptedReceivedMsg), auditPublic));
+
+        ////
+        String url = "http://localhost:8333/Bclient/compareLogH";
+
+        //keyChain=12&keyName=y&keyType=0
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        //String h=DigestUtils.sha256Hex(s);
+
+        MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
+        map.add("signature", "xiaohu");
+        map.add("payload", s);// map.add("payload", "123");
+        map.add("owner", "0x492444fd2216400ed15521a5f69d25262b73a288");
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
 
@@ -253,7 +383,9 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
         //String receivedMsg= m.Dec_JWT(EncryptedReceivedMsg, (RSAPrivateKey)receiverPair.getPrivate());
         System.out.println("Received Msg After Decrypt:" +DecryptedReceivedMsg);
         String VerifyAudit=m.ArraytoStringCleanCut(m.encrypt_long(m.Split_to_List(DecryptedReceivedMsg), auditPublic));
-
+        AuditRecsforReceivedMessages.add(VerifyAudit);
+       // compareLogHash("xiaohu", DigestUtils.sha256Hex("sss"), "0x492444fd2216400ed15521a5f69d25262b73a288");
+        compareLogString("xiaohu", "sss", "0x492444fd2216400ed15521a5f69d25262b73a288");
         ////
         String url = "http://localhost:8333/Bclient/compareLog";
 
@@ -265,7 +397,7 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
         MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
         map.add("signature", "xiaohu");
         map.add("payload", VerifyAudit);// map.add("payload", "123");
-        map.add("owner", "0x1ad480699864888095f7271861e2c7af8700c0f9");
+        map.add("owner", "0x492444fd2216400ed15521a5f69d25262b73a288");
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
 
@@ -288,7 +420,7 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
         MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
         map.add("signature", "xiaohu");
         map.add("payload", forAudit);// map.add("payload", "123");
-        map.add("owner", "0x1ad480699864888095f7271861e2c7af8700c0f9");
+        map.add("owner", "0x492444fd2216400ed15521a5f69d25262b73a288");
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
 
@@ -435,14 +567,17 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
 
           String[] receivedMsgArray=m.StringCleanCuttoArray(message);///////////////////
           String receivedMsg=m.ArraytoString(m.decrypt_long(receivedMsgArray, (RSAPrivateKey)receiverPair.getPrivate()));
-          m=new JWTMsg(receivedMsg, true);
+        // m=new JWTMsg(receivedMsg);
+         // m=new JWTMsg(receivedMsg, true);
           //System.out.println("Received "+m.toString());
-          System.out.println("Sig "+m.getSig());
-          System.out.println("Verifying the signature=" + m.verify(m.getData(), m.getSig(), MsgSenderPair.getPublic()));
+          //System.out.println("Sig "+m.getSig());
+         // System.out.println("Verifying the signature=" + m.verify(m.getData(), m.getSig(), MsgSenderPair.getPublic()));
 
     	 // boolean verif=EncryptedAuditRecordverification(message,"client2");//Here's where the problem is. When this is commented, the message gets received.
-          compareLog("xiaohu", receivedMsg, "0x1ad480699864888095f7271861e2c7af8700c0f9");
+          compareLog("xiaohu", receivedMsg, "0x80bd8b0e1cd2f6c4fffdac470be4ab9c7006c7a8");
               msgPool.add(message);//
+
+          ReferenceofAuditRecsforReceivedMessages.add(DigestUtils.sha256Hex(receivedMsg));
 
          double delay=LogNormalbasedDelayGeneration.simulate_delay_time(constant, mu, sigma);
         		 
@@ -538,6 +673,7 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
            break;*/
             case "ini" :{ini();
                 System.out.println("0 to Add Address, 1 to VerifyServer, 2 to see last reported record on the audit server, 3 to Publish a message, 4 Send a message to another recipient, 5 to Override Recipient Port,6 Send with clear , X to exit.");
+                saveLogString("xiaohu", "sss");
                 option=scan.nextLine();}
             break;
         case "0" :{
@@ -548,15 +684,13 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
             }
             System.out.println(senderPair.getPublic().toString());
             saveKey("xiaohu", senderPair.getPublic().toString(), keyPairName);
-            getKey("xiaohu", "0x1ad480699864888095f7271861e2c7af8700c0f9", keyPairName);
+            getKey("xiaohu", "0x80bd8b0e1cd2f6c4fffdac470be4ab9c7006c7a8", keyPairName);
         System.out.println("0 to Add Address, 1 to VerifyServer, 2 to see last reported record on the audit server, 3 to Publish a message, 4 Send a message to another recipient, 5 to Override Recipient Port, X to exit.");
         option=scan.nextLine();}
-        break; 
-        case "1" :{
-        	AuditServerVerificartion();
-            System.out.println(getStoredAuditRecs());
-            System.out.println("0 to Add Address, 1 to VerifyServer, 2 to see last reported record on the audit server, 3 to Publish a message, 4 Send a message to another recipient, X to exit.");
-            option=scan.nextLine();}
+        break;
+        case "1" :{ compareLogString("xiaohu", "sss", "0x492444fd2216400ed15521a5f69d25262b73a288");
+            System.out.println("0 to Add Address, 1 to VerifyServer, 2 to see last reported record on the audit server, 3 to Publish a message, 4 Send a message to another recipient, 5 to Override Recipient Port, X to exit.");
+        	option=scan.nextLine();}
             break;
         case "2" :{ 
         	System.out.println("mostRecentReportingTime "+mostRecentReportingTime+" mostRecentAuditRecord "+ mostRecentAuditRecord+ " mostRecentReportedLocalHash "+ mostRecentReportedLocalHash);
@@ -737,11 +871,17 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
     //String s=globalmsg.sign(ToSend.to_send, senderPair.getPrivate());
     //System.out.println("Signature "+s);
     //added the signature to the msg
-          	msg=new JWTMsg(ToSend.to_send, name, recipientPort, "THis is a label", new String[] {"Prev1"}, new String[] {"ParaPrev1"});
+          if(AuditRecsforReceivedMessages.isEmpty()) {//if this or ReferenceofAuditRecsforReceivedMessages is empty
+          msg=new JWTMsg(ToSend.to_send, name, recipientPort, "THis is a label", new String[] {"Prev1"}, new String[] {"ParaPrev1"});
+         }
+         else { msg=new JWTMsg(ToSend.to_send, name, recipientPort,"THis is a label", ArraylistToArray(ReferenceofAuditRecsforReceivedMessages), new String[] {"ParaPrev1"});}
+
+          //	msg=new JWTMsg(ToSend.to_send, name, recipientPort, "THis is a label", new String[] {"Prev1"}, new String[] {"ParaPrev1"});
           	//System.out.println("Before Sending "+msg.);
-          msg.setSig(msg.sign(ToSend.to_send, senderPair.getPrivate()));
-            System.out.println("Sig" +msg.sign(ToSend.to_send, senderPair.getPrivate()));
-         // System.out.println("GetSig" + msg.getSig());
+         msg.setSig(msg.sign(ToSend.to_send, senderPair.getPrivate()));
+            System.out.println("Sig " +msg.sign(ToSend.to_send, senderPair.getPrivate()));
+
+            //System.out.println("GetSig" + msg.getSig());
         	 // msg=new JWTMsg(ToSend.to_send, name, recipientPort, "", ArraylistToArray(ReferenceofAuditRecsforReceivedMessages), new String[] {"ParaPrev1"});
           
 
@@ -927,19 +1067,22 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
 		KeyPair auditPair =msg.getKeyPairFromFile(auditKeyPair, "serverpw", serverpassphrase, "serverprivate");
 		
 		String JWTEncMsg= msg.ArraytoStringCleanCut(msg.encrypt_long(msg.Split_to_List(msg.Plain_JWT(msg)), receiverPair.getPublic()));//msg.Enc_JWT(msg,(RSAPublicKey)receiverPair.getPublic());
-		//System.out.println("Encrypted String Sent to Next participant " +JWTEncMsg);
+        //String receivedMsg=msg.ArraytoString(msg.decrypt_long(JWTEncMsg, (RSAPrivateKey)receiverPair.getPrivate()));
+        //System.out.println("Encrypted String Sent to Next participant " +JWTEncMsg);
+        System.out.println("Plain "+msg.Plain_JWT(msg).toString());
 		System.out.println("UnencryptedMsgSize= "+ msg.Plain_JWT(msg).length()+" SentMsgSize= "+ JWTEncMsg.length()+ " which is equivalent to "+  JWTEncMsg.length()/343+ "Unit(s)");
 		UnencryptedSentMsglength=msg.Plain_JWT(msg).length();encryptedSentMsglength=JWTEncMsg.length();
 		SentMessageSize=JWTEncMsg.length()/343;
 		//My guess is that when encrypting a string with a public key, its size changes.<=========
 		String[] EncryptedArray=msg.encrypt_long(msg.Split_to_List(msg.Plain_JWT(msg)), receiverPair.getPublic());
 		/////System.out.println("Printing Array: "+ EncryptedArray.toString());
-		
+		//maybe decrypt with private and re-encrypt with audit before logging.
+
 		String JWTEncAudit= msg.ArraytoStringCleanCut(msg.encrypt_long(msg.Split_to_List(msg.Plain_JWT(msg)), auditPair.getPublic()));//msg.Enc_JWT(msg,(RSAPublicKey)auditPair.getPublic());
 		
 		System.out.println("PrePublish. ");
 		//publishAuditRecord(SenderPrivateKey, JWTEncAudit, senderAddress);
-		saveLog("xiaohu", msg);
+		saveLog("xiaohu", msg);//
 		////System.out.println("Publishing Passed. ");
 		//sendHTTPMessage(RecipientURL,JWTEncMsg); It works if I type the string though.
 		/*We have a problem here. For some readon, I cannot send JWTEncMsg.
