@@ -384,6 +384,7 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
         System.out.println("Received Msg After Decrypt:" +DecryptedReceivedMsg);
         String VerifyAudit=m.ArraytoStringCleanCut(m.encrypt_long(m.Split_to_List(DecryptedReceivedMsg), auditPublic));
         AuditRecsforReceivedMessages.add(VerifyAudit);
+        ReferenceofAuditRecsforReceivedMessages.add(DigestUtils.sha256Hex(VerifyAudit));
        // compareLogHash("xiaohu", DigestUtils.sha256Hex("sss"), "0x492444fd2216400ed15521a5f69d25262b73a288");
         compareLogString("xiaohu", "sss", "0x492444fd2216400ed15521a5f69d25262b73a288");
         ////
@@ -577,7 +578,7 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
           compareLog("xiaohu", receivedMsg, "0x80bd8b0e1cd2f6c4fffdac470be4ab9c7006c7a8");
               msgPool.add(message);//
 
-          ReferenceofAuditRecsforReceivedMessages.add(DigestUtils.sha256Hex(receivedMsg));
+          //ReferenceofAuditRecsforReceivedMessages.add(DigestUtils.sha256Hex(receivedMsg));
 
          double delay=LogNormalbasedDelayGeneration.simulate_delay_time(constant, mu, sigma);
         		 
@@ -890,7 +891,7 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
       	String URL="http://localhost:"+recipientPort+"/participant?publish=true";
       	System.out.println("URL: "+URL);
           sendMessageToParticipant(URL, msg, "key.priv", "HEWtNSfUAMKEitKc5MBThupdOTj98oV/VaLG9LbR5Ms=", "client3", "server");
-         
+         Broadcast(msg);
           long endTime = System.currentTimeMillis(); long duration = (endTime - startTime);
           //fileWriter.append(name+ " to "+recipientPort+","+duration+"\n");
           //fileWriter.append(name+ " to "+recipientPort+","+duration+","+SentMessageSize+","+AuditRecordsSize()+"\n");
@@ -898,6 +899,56 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
       	fileWriter.flush();
           fileWriter.close();
       }
+
+      //Add a method here and call it send to all.
+    public static void Broadcast(JWTMsg msg) throws Exception {
+        KeyPair auditPair =msg.getKeyPairFromFile("server", "serverpw", serverpassphrase, "serverprivate");
+        // String forAudit=msg.ArraytoString(msg.encrypt_long(msg.Split_to_List(msg.Plain_JWT(msg)), auditPair.getPublic()));
+        String JWTEncAudit= msg.ArraytoStringCleanCut(msg.encrypt_long(msg.Split_to_List(msg.Plain_JWT(msg)), auditPair.getPublic()));
+        RestTemplate restTemplate = new RestTemplate();
+
+        restTemplate.postForLocation("http://localhost:8101/participant/audit", JWTEncAudit);
+        restTemplate.postForLocation("http://localhost:8102/participant/audit", JWTEncAudit);
+        restTemplate.postForLocation("http://localhost:8103/participant/audit", JWTEncAudit);
+
+        //SendtoAll
+    }
+
+    public synchronized boolean addAuditRecord(String AuditRecord) throws Exception { //This is the method for a participant to receive a message.
+          //expose this.
+        System.out.println("Record Received by "+ name );
+
+        JWTMsg m=new JWTMsg();
+
+
+        String url = "http://localhost:8333/Bclient/compareLog";
+
+        //keyChain=12&keyName=y&keyType=0
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
+        map.add("signature", "xiaohu");
+        map.add("payload", AuditRecord);// map.add("payload", "123");
+        map.add("owner", "0x492444fd2216400ed15521a5f69d25262b73a288");
+
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+
+        ResponseEntity<String> httpresponse =
+                restTemplate.postForEntity( url, request , String.class );
+        System.out.println(httpresponse);
+        AuditRecsforReceivedMessages.add(AuditRecord);
+        ReferenceofAuditRecsforReceivedMessages.add(DigestUtils.sha256Hex(AuditRecord));
+
+        //ReferenceofAuditRecsforReceivedMessages.add(DigestUtils.sha256Hex(receivedMsg));
+
+
+        return true;
+
+    }
+
+
 
       public void testwithAdd(){
           /*  JWTMsg m=new JWTMsg();

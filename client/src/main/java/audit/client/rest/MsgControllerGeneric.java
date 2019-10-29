@@ -75,6 +75,23 @@ public class MsgControllerGeneric {
 		 * response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE); }
 		 */
 	}
+
+	@RequestMapping(value="audit", method = RequestMethod.POST)
+	void addaudit(@RequestBody String message, @RequestParam(required = false) Boolean publish) throws Exception { // HttpServletResponse
+		// response)
+		// {
+		// LOG.info("Add transaction " +
+		// Base64.encodeBase64String(transaction.getHash()));
+		boolean success = msgService.addAuditRecord(message);//Had to throw exceptions after I added AuditRecordverification(message);
+
+		/*
+		 * if (success) { response.setStatus(HttpServletResponse.SC_ACCEPTED);
+		 *
+		 * if (publish != null && publish) { // nodeService.broadcastPut("transaction",
+		 * transaction); } } else {
+		 * response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE); }
+		 */
+	}
 	
 	@RequestMapping(value= "call", method = RequestMethod.POST)
 	void callParticipant(@RequestBody String port, @RequestParam(required = false) String first) throws Exception { // HttpServletResponse
