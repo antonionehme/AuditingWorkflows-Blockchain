@@ -318,7 +318,7 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
         MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
         map.add("signature", "xiaohu");
         map.add("payload", s);// map.add("payload", "123");
-        map.add("owner", "0x492444fd2216400ed15521a5f69d25262b73a288");
+        map.add("owner", "80bd8b0e1cd2f6c4fffdac470be4ab9c7006c7a8");//changed from 0x492444fd2216400ed15521a5f69d25262b73a288
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
 
@@ -357,7 +357,7 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
         MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
         map.add("signature", "xiaohu");
         map.add("payload", s);// map.add("payload", "123");
-        map.add("owner", "0x492444fd2216400ed15521a5f69d25262b73a288");
+        map.add("owner", "80bd8b0e1cd2f6c4fffdac470be4ab9c7006c7a8");//changed from 0x492444fd2216400ed15521a5f69d25262b73a288
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
 
@@ -386,7 +386,7 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
         AuditRecsforReceivedMessages.add(VerifyAudit);
         ReferenceofAuditRecsforReceivedMessages.add(DigestUtils.sha256Hex(VerifyAudit));
        // compareLogHash("xiaohu", DigestUtils.sha256Hex("sss"), "0x492444fd2216400ed15521a5f69d25262b73a288");
-        compareLogString("xiaohu", "sss", "0x492444fd2216400ed15521a5f69d25262b73a288");
+        compareLogString("xiaohu", "sss", "80bd8b0e1cd2f6c4fffdac470be4ab9c7006c7a8");//changed
         ////
         String url = "http://localhost:8333/Bclient/compareLog";
 
@@ -398,7 +398,7 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
         MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
         map.add("signature", "xiaohu");
         map.add("payload", VerifyAudit);// map.add("payload", "123");
-        map.add("owner", "0x492444fd2216400ed15521a5f69d25262b73a288");
+        map.add("owner", "80bd8b0e1cd2f6c4fffdac470be4ab9c7006c7a8");//changed
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
 
@@ -421,7 +421,7 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
         MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
         map.add("signature", "xiaohu");
         map.add("payload", forAudit);// map.add("payload", "123");
-        map.add("owner", "0x492444fd2216400ed15521a5f69d25262b73a288");
+        map.add("owner", "80bd8b0e1cd2f6c4fffdac470be4ab9c7006c7a8");//changed
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
 
@@ -689,7 +689,7 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
         System.out.println("0 to Add Address, 1 to VerifyServer, 2 to see last reported record on the audit server, 3 to Publish a message, 4 Send a message to another recipient, 5 to Override Recipient Port, X to exit.");
         option=scan.nextLine();}
         break;
-        case "1" :{ compareLogString("xiaohu", "sss", "0x492444fd2216400ed15521a5f69d25262b73a288");
+        case "1" :{ compareLogString("xiaohu", "sss", "80bd8b0e1cd2f6c4fffdac470be4ab9c7006c7a8");
             System.out.println("0 to Add Address, 1 to VerifyServer, 2 to see last reported record on the audit server, 3 to Publish a message, 4 Send a message to another recipient, 5 to Override Recipient Port, X to exit.");
         	option=scan.nextLine();}
             break;
@@ -931,7 +931,7 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
         MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
         map.add("signature", "xiaohu");
         map.add("payload", AuditRecord);// map.add("payload", "123");
-        map.add("owner", "0x492444fd2216400ed15521a5f69d25262b73a288");
+        map.add("owner", "80bd8b0e1cd2f6c4fffdac470be4ab9c7006c7a8");//changed
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
 

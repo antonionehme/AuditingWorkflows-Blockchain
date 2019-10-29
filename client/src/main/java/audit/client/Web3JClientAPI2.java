@@ -272,8 +272,8 @@ public class Web3JClientAPI2 {
             try {
                 //logFactory = LogFactory.load(contractAddress,web3,credentials,GAS_PRICE,GAS_LIMIT);
                 Boolean b = logFactory.compareLogs(signature, payload, owner).sendAsync().get();  // trigger with verification
-                //System.out.println("Payload and sig"+signature+ " " + payload);
-                //System.out.println("is match ? "+b);
+               // System.out.println("Payload and sig"+signature+ " " + payload);
+                System.out.println("is match ? "+b);
                 return "it's a match";
             } catch (Exception e) {
                 e.printStackTrace();
