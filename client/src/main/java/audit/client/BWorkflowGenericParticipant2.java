@@ -405,7 +405,7 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
         ResponseEntity<String> httpresponse =
                 restTemplate.postForEntity( url, request , String.class );
         System.out.println(httpresponse);
-        //BroadcastfromReceiver(VerifyAudit);
+        BroadcastfromReceiver(restTemplate, VerifyAudit);
     }
 
     //signature=xiao&payload=123&owner=0x48e46c23904a4785191719a43c889a3c8540011d
@@ -569,6 +569,7 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
 
           String[] receivedMsgArray=m.StringCleanCuttoArray(message);///////////////////
           String receivedMsg=m.ArraytoString(m.decrypt_long(receivedMsgArray, (RSAPrivateKey)receiverPair.getPrivate()));
+
         // m=new JWTMsg(receivedMsg);
          // m=new JWTMsg(receivedMsg, true);
           //System.out.println("Received "+m.toString());
@@ -582,7 +583,8 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
           //ReferenceofAuditRecsforReceivedMessages.add(DigestUtils.sha256Hex(receivedMsg));
 
          double delay=LogNormalbasedDelayGeneration.simulate_delay_time(constant, mu, sigma);
-        		 
+          String sig= m.sign(receivedMsg, receiverPair.getPrivate());
+          System.out.println("Receiver Proof of delivery " +sig);//added: changing this method to return string would do to display to sending participant.
          long endTime_recieve = System.currentTimeMillis(); long duration_recieve = (endTime_recieve - startTime_recieve);//+(long)delay;
          //long duration_recieve_with_delay=(endTime_recieve - startTime_recieve)+(long)delay;
          //fileWriter_recieve.append(name+","+duration_recieve+","+duration_recieve_with_delay+"\n");
@@ -892,7 +894,7 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
       	String URL="http://localhost:"+recipientPort+"/participant?publish=true";
       	System.out.println("URL: "+URL);
           sendMessageToParticipant(URL, msg, "key.priv", "HEWtNSfUAMKEitKc5MBThupdOTj98oV/VaLG9LbR5Ms=", "client3", "server");
-         Broadcast(msg);
+         //Broadcast(msg);
           long endTime = System.currentTimeMillis(); long duration = (endTime - startTime);
           //fileWriter.append(name+ " to "+recipientPort+","+duration+"\n");
           //fileWriter.append(name+ " to "+recipientPort+","+duration+","+SentMessageSize+","+AuditRecordsSize()+"\n");
@@ -917,11 +919,11 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
         //SendtoAll
     }
 
-    public static void BroadcastfromReceiver(String EncAuditRec) throws Exception {
+    public static void BroadcastfromReceiver(RestTemplate restTemplate, String EncAuditRec) throws Exception {
       //  KeyPair auditPair =msg.getKeyPairFromFile("server", "serverpw", serverpassphrase, "serverprivate");
         // String forAudit=msg.ArraytoString(msg.encrypt_long(msg.Split_to_List(msg.Plain_JWT(msg)), auditPair.getPublic()));
       //  String JWTEncAudit= msg.ArraytoStringCleanCut(msg.encrypt_long(msg.Split_to_List(msg.Plain_JWT(msg)), auditPair.getPublic()));
-        RestTemplate restTemplate = new RestTemplate();
+        //RestTemplate restTemplate = new RestTemplate();
         for(int i=8101; i<=8103;i++){
             if(i!=Integer.parseInt(port)){
                 restTemplate.postForLocation("http://localhost:"+i+"/participant/audit", EncAuditRec);}
