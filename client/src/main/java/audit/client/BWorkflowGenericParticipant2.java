@@ -382,7 +382,7 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
 
         //String receivedMsg= m.Dec_JWT(EncryptedReceivedMsg, (RSAPrivateKey)receiverPair.getPrivate());
         System.out.println("Received Msg After Decrypt:" +DecryptedReceivedMsg);
-        String VerifyAudit=m.ArraytoStringCleanCut(m.encrypt_long(m.Split_to_List(DecryptedReceivedMsg), auditPublic));
+        String VerifyAudit=m.ArraytoStringCleanCut(m.encrypt_long(m.Split_to_List(DecryptedReceivedMsg), auditPublic));//Use this to broadcast.
         AuditRecsforReceivedMessages.add(VerifyAudit);
         ReferenceofAuditRecsforReceivedMessages.add(DigestUtils.sha256Hex(VerifyAudit));
        // compareLogHash("xiaohu", DigestUtils.sha256Hex("sss"), "0x492444fd2216400ed15521a5f69d25262b73a288");
@@ -405,6 +405,7 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
         ResponseEntity<String> httpresponse =
                 restTemplate.postForEntity( url, request , String.class );
         System.out.println(httpresponse);
+        //BroadcastfromReceiver(VerifyAudit);
     }
 
     //signature=xiao&payload=123&owner=0x48e46c23904a4785191719a43c889a3c8540011d
@@ -907,15 +908,31 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
         String JWTEncAudit= msg.ArraytoStringCleanCut(msg.encrypt_long(msg.Split_to_List(msg.Plain_JWT(msg)), auditPair.getPublic()));
         RestTemplate restTemplate = new RestTemplate();
 
-        restTemplate.postForLocation("http://localhost:8101/participant/audit", JWTEncAudit);
-        restTemplate.postForLocation("http://localhost:8102/participant/audit", JWTEncAudit);
-        restTemplate.postForLocation("http://localhost:8103/participant/audit", JWTEncAudit);
+        for(int i=8101; i<=8103;i++){
+            if(i!=Integer.parseInt(port)){
+        restTemplate.postForLocation("http://localhost:"+i+"/participant/audit", JWTEncAudit);}
+        }
+        //Applies to sender and receiver. Remove adding audit recs after verification for consistency. 387.
+
+        //SendtoAll
+    }
+
+    public static void BroadcastfromReceiver(String EncAuditRec) throws Exception {
+      //  KeyPair auditPair =msg.getKeyPairFromFile("server", "serverpw", serverpassphrase, "serverprivate");
+        // String forAudit=msg.ArraytoString(msg.encrypt_long(msg.Split_to_List(msg.Plain_JWT(msg)), auditPair.getPublic()));
+      //  String JWTEncAudit= msg.ArraytoStringCleanCut(msg.encrypt_long(msg.Split_to_List(msg.Plain_JWT(msg)), auditPair.getPublic()));
+        RestTemplate restTemplate = new RestTemplate();
+        for(int i=8101; i<=8103;i++){
+            if(i!=Integer.parseInt(port)){
+                restTemplate.postForLocation("http://localhost:"+i+"/participant/audit", EncAuditRec);}
+        }
 
         //SendtoAll
     }
 
     public synchronized boolean addAuditRecord(String AuditRecord) throws Exception { //This is the method for a participant to receive a message.
           //expose this.
+        //This includes verifying the record.
         System.out.println("Record Received by "+ name );
 
         JWTMsg m=new JWTMsg();
