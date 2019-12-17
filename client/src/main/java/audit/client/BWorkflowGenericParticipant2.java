@@ -580,7 +580,7 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
           compareLog("xiaohu", receivedMsg, "0x80bd8b0e1cd2f6c4fffdac470be4ab9c7006c7a8");
               msgPool.add(message);//
 
-          //ReferenceofAuditRecsforReceivedMessages.add(DigestUtils.sha256Hex(receivedMsg));
+          //ReferenceofAuditRecsforReceivedMessages.add(DigestUtils.sha256Hex(receivedMsg));//encode for verif.
 
          double delay=LogNormalbasedDelayGeneration.simulate_delay_time(constant, mu, sigma);
           String sig= m.sign(receivedMsg, receiverPair.getPrivate());
@@ -924,7 +924,7 @@ public class BWorkflowGenericParticipant2 {//Added the extension hoping to get t
         // String forAudit=msg.ArraytoString(msg.encrypt_long(msg.Split_to_List(msg.Plain_JWT(msg)), auditPair.getPublic()));
       //  String JWTEncAudit= msg.ArraytoStringCleanCut(msg.encrypt_long(msg.Split_to_List(msg.Plain_JWT(msg)), auditPair.getPublic()));
         //RestTemplate restTemplate = new RestTemplate();
-        for(int i=8101; i<=8103;i++){
+        for(int i=8101; i<=8120;i++){
             if(i!=Integer.parseInt(port)){
                 restTemplate.postForLocation("http://localhost:"+i+"/participant/audit", EncAuditRec);}
         }
